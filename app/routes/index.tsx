@@ -1,3 +1,5 @@
+import Youtube from 'react-player/youtube'
+
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
@@ -27,6 +29,7 @@ export default function Index() {
           </a>
         </li>
       </ul>
+      <Youtube url='https://www.youtube.com/watch?v=ysz5S6PUM-U' />
     </div>
   );
 }
