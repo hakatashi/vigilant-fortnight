@@ -23,8 +23,8 @@
     "react-player": "^2.10.1"
   },
   "devDependencies": {
-    "@hakatashi/eslint-config": "^1.18.0",
     "@cloudflare/workers-types": "^3.10.0",
+    "@hakatashi/eslint-config": "^1.18.0",
     "@remix-run/dev": "^1.5.1",
     "@remix-run/eslint-config": "^1.5.1",
     "@types/react": "^17.0.45",
@@ -32,7 +32,8 @@
     "eslint": "^8.15.0",
     "miniflare": "^2.4.0",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "wrangler": "^2.0.6"
   },
   "engines": {
     "node": ">=14"
