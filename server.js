@@ -12,7 +12,10 @@ addEventListener(
 		if (path === '/ping') {
 			return event.respondWith(
 				new Response(Date.now().toString(), {
-					headers: {'Content-Type': 'text/plain;charset=UTF-8'},
+					headers: {
+						'Content-Type': 'text/plain;charset=UTF-8',
+						'Cache-Control': 'private',
+					},
 				}),
 			);
 		}
