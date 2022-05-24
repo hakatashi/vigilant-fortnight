@@ -22,6 +22,7 @@ export default function Index() {
 	const [fetchEnd, setFetchEnd] = useState(0);
 	const [fetchServerStart, setFetchServerStart] = useState(0);
 	const [fetchServerEnd, setFetchServerEnd] = useState(0);
+	const [isBigCircle, setIsBigCircle] = useState(false);
 
 	useEffect(() => {
 		console.log('loading client-side time');
@@ -42,7 +43,21 @@ export default function Index() {
 			const text = await res.text();
 			setFetchServerStart(parseInt(text));
 		})();
-	}, [setFetchStart, setFetchEnd, setFetchServerStart]);
+	}, []);
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			const clockOffset = ((fetchServerStart - fetchStart) + (fetchServerStart - fetchEnd)) / 2;
+			const syncedTime = Date.now() + clockOffset;
+			const newIsBigCircle = Math.floor(syncedTime / 3000) % 2 === 0;
+			if (isBigCircle !== newIsBigCircle) {
+				setIsBigCircle(newIsBigCircle);
+			}
+		}, 10);
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [isBigCircle, setIsBigCircle, fetchServerStart, fetchStart, fetchEnd]);
 
 	const offset = Math.min(
 		...[serverSideClock, clientSideClock, fetchStart, fetchEnd, fetchServerStart, fetchServerEnd]
@@ -87,6 +102,14 @@ export default function Index() {
 			<p>Ping client end: +{fetchEnd - offset}ms</p>
 			<p>RTT: +{rtt}ms</p>
 			<p>Clock offset: {clockOffset}ms</p>
+			<div style={{
+				width: '10rem',
+				height: '10rem',
+				borderRadius: '5rem',
+				background: 'black',
+				transform: isBigCircle ? 'scale(1)' : 'scale(0.5)',
+			}}
+			/>
 		</div>
 	);
 }
