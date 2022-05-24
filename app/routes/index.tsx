@@ -1,6 +1,29 @@
-import Youtube from 'react-player/youtube';
+/* eslint-disable react/react-in-jsx-scope */
 
+import {json} from '@remix-run/cloudflare';
+import {Link, useLoaderData} from '@remix-run/react';
+import {useEffect, useState} from 'react';
+// import Youtube from 'react-player/youtube';
+
+export const loader = async () => {
+	console.log('loading server-side time');
+
+	return json({
+		serverSideClock: Date.now(),
+	});
+};
+
+// eslint-disable-next-line react/function-component-definition, require-jsdoc
 export default function Index() {
+	const {serverSideClock} = useLoaderData();
+
+	const [clientSideClock, setClientSideClock] = useState(0);
+
+	useEffect(() => {
+		console.log('loading client-side time');
+		setClientSideClock(Date.now());
+	}, [setClientSideClock]);
+
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Welcome to Remix</h1>
@@ -24,12 +47,12 @@ export default function Index() {
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-						Remix Docs
-					</a>
+					<Link to="/other">Other page</Link>
 				</li>
 			</ul>
-			<Youtube muted playing url="https://www.youtube.com/watch?v=HHBbWFd02_A"/>
+			<p>aaaa</p>
+			<p>Server-side clock: {serverSideClock}</p>
+			<p>Client-side clock: {clientSideClock}</p>
 		</div>
 	);
 }
