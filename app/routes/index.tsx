@@ -49,6 +49,9 @@ export default function Index() {
 			.filter((t) => t !== 0),
 	);
 
+	const rtt = fetchEnd - fetchStart;
+	const clockOffset = ((fetchServerStart - fetchStart) + (fetchServerStart - fetchEnd)) / 2;
+
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Welcome to Remix</h1>
@@ -82,6 +85,8 @@ export default function Index() {
 			<p>Ping server start: +{fetchServerStart - offset}ms</p>
 			<p>Ping server end: +{fetchServerEnd - offset}ms</p>
 			<p>Ping client end: +{fetchEnd - offset}ms</p>
+			<p>RTT: +{rtt}ms</p>
+			<p>Clock offset: {clockOffset}ms</p>
 		</div>
 	);
 }
