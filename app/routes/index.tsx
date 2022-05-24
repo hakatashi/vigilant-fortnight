@@ -18,11 +18,36 @@ export default function Index() {
 	const {serverSideClock} = useLoaderData();
 
 	const [clientSideClock, setClientSideClock] = useState(0);
+	const [fetchStart, setFetchStart] = useState(0);
+	const [fetchEnd, setFetchEnd] = useState(0);
+	const [fetchServerStart, setFetchServerStart] = useState(0);
+	const [fetchServerEnd, setFetchServerEnd] = useState(0);
 
 	useEffect(() => {
 		console.log('loading client-side time');
 		setClientSideClock(Date.now());
 	}, [setClientSideClock]);
+
+	useEffect(() => {
+		(async () => {
+			setFetchStart(Date.now());
+			const res = await fetch('/ping');
+			setFetchEnd(Date.now());
+
+			const dateHeader = res.headers.get('Date');
+			if (dateHeader) {
+				setFetchServerEnd(new Date(dateHeader).getTime());
+			}
+
+			const text = await res.text();
+			setFetchServerStart(parseInt(text));
+		})();
+	}, [setFetchStart, setFetchEnd, setFetchServerStart]);
+
+	const offset = Math.min(
+		...[serverSideClock, clientSideClock, fetchStart, fetchEnd, fetchServerStart, fetchServerEnd]
+			.filter((t) => t !== 0),
+	);
 
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
@@ -51,8 +76,12 @@ export default function Index() {
 				</li>
 			</ul>
 			<p>aaaa</p>
-			<p>Server-side clock: {serverSideClock}</p>
-			<p>Client-side clock: {clientSideClock}</p>
+			<p>Server-side clock: +{serverSideClock - offset}ms</p>
+			<p>Client-side clock: +{clientSideClock - offset}ms</p>
+			<p>Ping client start: +{fetchStart - offset}ms</p>
+			<p>Ping server start: +{fetchServerStart - offset}ms</p>
+			<p>Ping server end: +{fetchServerEnd - offset}ms</p>
+			<p>Ping client end: +{fetchEnd - offset}ms</p>
 		</div>
 	);
 }
