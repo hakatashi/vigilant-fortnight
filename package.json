@@ -18,13 +18,14 @@
     "@remix-run/cloudflare-workers": "^1.5.1",
     "@remix-run/react": "^1.5.1",
     "cross-env": "^7.0.3",
+    "peerjs": "^1.4.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-player": "^2.10.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.10.0",
-    "@hakatashi/eslint-config": "^1.18.0",
+    "@hakatashi/eslint-config": "hakatashi/eslint-config#v1.19.0",
     "@remix-run/dev": "^1.5.1",
     "@remix-run/eslint-config": "^1.5.1",
     "@types/react": "^17.0.45",
