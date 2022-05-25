@@ -93,7 +93,6 @@ export default function Index() {
 					<Link to="/other">Other page</Link>
 				</li>
 			</ul>
-			<p>aaaa</p>
 			<p>Server-side clock: +{serverSideClock - offset}ms</p>
 			<p>Client-side clock: +{clientSideClock - offset}ms</p>
 			<p>Ping client start: +{fetchStart - offset}ms</p>
