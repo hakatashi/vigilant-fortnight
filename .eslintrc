@@ -5,7 +5,7 @@
     "@hakatashi/eslint-config/typescript"
   ],
   "rules": {
-    "require-jsdoc": "ignore",
-    "react/react-in-jsx-scope": "ignore"
+    "require-jsdoc": "off",
+    "react/react-in-jsx-scope": "off"
   }
 }
