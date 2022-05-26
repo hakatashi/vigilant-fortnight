@@ -18,12 +18,15 @@ export class ClockSync {
 
 	private measuredRtts: number[];
 
+	private pingCount: number;
+
 	constructor() {
 		this.measuredClockOffsets = [];
 		this.measuredRtts = [];
+		this.pingCount = 0;
 		this.nextTimeoutId = setTimeout(() => {
 			this.probe();
-		}, 1000);
+		}, this.getNextProbeInterval());
 	}
 
 	async probe() {
@@ -50,10 +53,12 @@ export class ClockSync {
 
 		this.nextTimeoutId = setTimeout(() => {
 			this.probe();
-		}, 1000);
+		}, this.getNextProbeInterval());
 	}
 
 	async ping() {
+		this.pingCount++;
+
 		const fetchStart = Date.now();
 		const res = await fetch('/ping');
 		const fetchEnd = Date.now();
@@ -62,6 +67,14 @@ export class ClockSync {
 		const fetchServerStart = parseInt(text);
 
 		return {fetchStart, fetchEnd, fetchServerStart};
+	}
+
+	private getNextProbeInterval() {
+		if (this.pingCount <= 5) {
+			return 1000;
+		}
+		const interval = 1000 + (this.pingCount - 5) * 1000;
+		return Math.min(interval, 60 * 1000);
 	}
 
 	teardown() {
