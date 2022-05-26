@@ -37,14 +37,14 @@ export class ClockSync {
 		if (this.measuredClockOffsets.length >= 5) {
 			this.measuredClockOffsets = this.measuredClockOffsets.slice(-5);
 			// eslint-disable-next-line prefer-destructuring
-			const finalClockOffset = this.measuredClockOffsets.sort()[2];
+			const finalClockOffset = this.measuredClockOffsets.slice().sort()[2];
 			setRecoil(clockOffsetState, finalClockOffset);
 		}
 
 		if (this.measuredRtts.length >= 5) {
 			this.measuredRtts = this.measuredRtts.slice(-5);
 			// eslint-disable-next-line prefer-destructuring
-			const finalRtt = this.measuredRtts.sort()[2];
+			const finalRtt = this.measuredRtts.slice().sort()[2];
 			setRecoil(rttState, finalRtt);
 		}
 
