@@ -6,13 +6,21 @@ export const clockOffsetState = atom<number>({
 	default: 0,
 });
 
+export const rttState = atom<number>({
+	key: 'lib.clockSync.rtt',
+	default: 0,
+});
+
 export class ClockSync {
 	private nextTimeoutId: NodeJS.Timer;
 
 	private measuredClockOffsets: number[];
 
+	private measuredRtts: number[];
+
 	constructor() {
 		this.measuredClockOffsets = [];
+		this.measuredRtts = [];
 		this.nextTimeoutId = setTimeout(() => {
 			this.probe();
 		}, 1000);
@@ -20,14 +28,24 @@ export class ClockSync {
 
 	async probe() {
 		const {fetchStart, fetchEnd, fetchServerStart} = await this.ping();
-		const clockOffset = ((fetchServerStart - fetchStart) + (fetchServerStart - fetchEnd)) / 2;
+		const clockOffset = (fetchServerStart - fetchStart) + (fetchServerStart - fetchEnd) / 2;
+		const rtt = fetchEnd - fetchStart;
+
 		this.measuredClockOffsets.push(clockOffset);
+		this.measuredRtts.push(rtt);
 
 		if (this.measuredClockOffsets.length >= 5) {
 			this.measuredClockOffsets = this.measuredClockOffsets.slice(-5);
 			// eslint-disable-next-line prefer-destructuring
 			const finalClockOffset = this.measuredClockOffsets.sort()[2];
 			setRecoil(clockOffsetState, finalClockOffset);
+		}
+
+		if (this.measuredRtts.length >= 5) {
+			this.measuredRtts = this.measuredRtts.slice(-5);
+			// eslint-disable-next-line prefer-destructuring
+			const finalRtt = this.measuredRtts.sort()[2];
+			setRecoil(rttState, finalRtt);
 		}
 
 		this.nextTimeoutId = setTimeout(() => {

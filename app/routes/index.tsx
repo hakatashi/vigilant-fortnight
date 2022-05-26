@@ -3,13 +3,14 @@
 import {Link} from '@remix-run/react';
 import {useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
-import {clockOffsetState, ClockSync} from '~/lib/clockSync';
+import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
 // import Youtube from 'react-player/youtube';
 
 // eslint-disable-next-line react/function-component-definition
 export default function Index() {
 	const [isBigCircle, setIsBigCircle] = useState(false);
 	const clockOffset = useRecoilValue(clockOffsetState);
+	const rtt = useRecoilValue(rttState);
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
@@ -58,6 +59,7 @@ export default function Index() {
 				</li>
 			</ul>
 			<p>Clock offset: {clockOffset}ms</p>
+			<p>RTT: {rtt}ms</p>
 			<div style={{
 				width: '10rem',
 				height: '10rem',
