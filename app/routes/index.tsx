@@ -3,6 +3,9 @@
 import {json} from '@remix-run/cloudflare';
 import {Link, useLoaderData} from '@remix-run/react';
 import {useEffect, useState} from 'react';
+import {useRecoilValue} from 'recoil';
+import {clockOffsetState, ClockSync} from '~/lib/clockSync';
+
 // import Youtube from 'react-player/youtube';
 
 export const loader = async () => {
@@ -23,6 +26,7 @@ export default function Index() {
 	const [fetchServerStart, setFetchServerStart] = useState(0);
 	const [fetchServerEnd, setFetchServerEnd] = useState(0);
 	const [isBigCircle, setIsBigCircle] = useState(false);
+	const clockOffsetTarget = useRecoilValue(clockOffsetState);
 
 	useEffect(() => {
 		console.log('loading client-side time');
@@ -58,6 +62,10 @@ export default function Index() {
 			clearInterval(intervalId);
 		};
 	}, [isBigCircle, setIsBigCircle, fetchServerStart, fetchStart, fetchEnd]);
+
+	useEffect(() => {
+		new ClockSync();
+	}, []);
 
 	const offset = Math.min(
 		...[serverSideClock, clientSideClock, fetchStart, fetchEnd, fetchServerStart, fetchServerEnd]
@@ -101,6 +109,7 @@ export default function Index() {
 			<p>Ping client end: +{fetchEnd - offset}ms</p>
 			<p>RTT: +{rtt}ms</p>
 			<p>Clock offset: {clockOffset}ms</p>
+			<p>Clock offset test: {clockOffsetTarget}ms</p>
 			<div style={{
 				width: '10rem',
 				height: '10rem',
