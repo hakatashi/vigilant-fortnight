@@ -28,7 +28,7 @@ export class ClockSync {
 
 	async probe() {
 		const {fetchStart, fetchEnd, fetchServerStart} = await this.ping();
-		const clockOffset = (fetchServerStart - fetchStart) + (fetchServerStart - fetchEnd) / 2;
+		const clockOffset = ((fetchServerStart - fetchStart) + (fetchServerStart - fetchEnd)) / 2;
 		const rtt = fetchEnd - fetchStart;
 
 		this.measuredClockOffsets.push(clockOffset);
