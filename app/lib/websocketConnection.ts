@@ -117,12 +117,12 @@ export default class WebsocketConnection {
 		let data: any = null;
 		try {
 			data = JSON.parse(event.data);
-		} catch (e) {
+		} catch (error) {
 			console.error('websocket message couldn\'t parsed');
 			return;
 		}
 
-		if (!this.peerIds.has(data.id)) {
+		if (data.id !== this.id && !this.peerIds.has(data.id)) {
 			setRecoil(peerIdsState, (current) => [...current, data.id]);
 		}
 
