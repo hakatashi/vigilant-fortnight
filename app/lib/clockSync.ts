@@ -1,5 +1,6 @@
 import {atom} from 'recoil';
 import {setRecoil} from 'recoil-nexus';
+import {median} from './utils';
 
 export const clockOffsetState = atom<number>({
 	key: 'lib.clockSync.clockOffset',
@@ -47,7 +48,7 @@ export class ClockSync {
 		if (this.measuredRtts.length >= 5) {
 			this.measuredRtts = this.measuredRtts.slice(-5);
 			// eslint-disable-next-line prefer-destructuring
-			const finalRtt = this.measuredRtts.slice().sort()[2];
+			const finalRtt = median(this.measuredRtts);
 			setRecoil(rttState, finalRtt);
 		}
 

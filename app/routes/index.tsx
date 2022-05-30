@@ -4,12 +4,14 @@ import {Link} from '@remix-run/react';
 import {useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
+import WebsocketConnection, {rttState as websocketPeerRttState} from '~/lib/websocketConnection';
 // import Youtube from 'react-player/youtube';
 
 // eslint-disable-next-line react/function-component-definition
 export default function Index() {
 	const [isBigCircle, setIsBigCircle] = useState(false);
 	const clockOffset = useRecoilValue(clockOffsetState);
+	const websocketPeerRtt = useRecoilValue(websocketPeerRttState);
 	const rtt = useRecoilValue(rttState);
 
 	useEffect(() => {
@@ -29,6 +31,13 @@ export default function Index() {
 		const clockSync = new ClockSync();
 		return () => {
 			clockSync.teardown();
+		};
+	}, []);
+
+	useEffect(() => {
+		const con = new WebsocketConnection();
+		return () => {
+			con.close();
 		};
 	}, []);
 
@@ -60,6 +69,7 @@ export default function Index() {
 			</ul>
 			<p>Clock offset: {clockOffset}ms</p>
 			<p>RTT: {rtt}ms</p>
+			<p>WebSocket Peer RTT: {websocketPeerRtt}ms</p>
 			<div style={{
 				width: '10rem',
 				height: '10rem',
