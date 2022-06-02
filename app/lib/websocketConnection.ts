@@ -41,6 +41,11 @@ export const rttState = atom<number>({
 	default: 0,
 });
 
+export const idState = atom<string>({
+	key: 'lib.websocketConnection.id',
+	default: '',
+});
+
 export const peerIdsState = atom<string[]>({
 	key: 'lib.websocketConnection.peerIds',
 	default: [],
@@ -69,6 +74,8 @@ export default class WebsocketConnection {
 		this.ws.addEventListener('message', (event) => {
 			this.onMessage(event);
 		});
+
+		setRecoil(idState, this.id);
 	}
 
 	onOpen() {
@@ -123,6 +130,7 @@ export default class WebsocketConnection {
 		}
 
 		if (data.id !== this.id && !this.peerIds.has(data.id)) {
+			this.peerIds.add(data.id);
 			setRecoil(peerIdsState, (current) => [...current, data.id]);
 		}
 

@@ -3,9 +3,11 @@
 import {Link} from '@remix-run/react';
 import {useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
+import {ClientOnly} from 'remix-utils';
 import PeerJsConnections from '~/lib/PeerJsConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
-import WebsocketConnection, {rttState as websocketPeerRttState, peerIdsState} from '~/lib/websocketConnection';
+import WebsocketConnection, {rttState as websocketPeerRttState, peerIdsState, idState} from '~/lib/websocketConnection';
+
 // import Youtube from 'react-player/youtube';
 
 // eslint-disable-next-line react/function-component-definition
@@ -14,6 +16,7 @@ export default function Index() {
 	const clockOffset = useRecoilValue(clockOffsetState);
 	const websocketPeerRtt = useRecoilValue(websocketPeerRttState);
 	const peerIds = useRecoilValue(peerIdsState);
+	const id = useRecoilValue(idState);
 	const rtt = useRecoilValue(rttState);
 
 	useEffect(() => {
@@ -72,7 +75,9 @@ export default function Index() {
 			<p>Clock offset: {clockOffset}ms</p>
 			<p>RTT: {rtt}ms</p>
 			<p>WebSocket Peer RTT: {websocketPeerRtt}ms</p>
-			<PeerJsConnections peerIds={peerIds}/>
+			<ClientOnly>
+				{() => <PeerJsConnections id={id} peerIds={peerIds}/>}
+			</ClientOnly>
 			<div style={{
 				width: '10rem',
 				height: '10rem',
