@@ -18,28 +18,28 @@
     "@remix-run/cloudflare-workers": "^1.5.1",
     "@remix-run/react": "^1.5.1",
     "cross-env": "^7.0.3",
-    "peerjs": "^1.4.5",
+    "peerjs": "^1.4.6",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-player": "^2.10.1",
-    "recoil": "^0.7.2",
+    "recoil": "^0.7.3",
     "recoil-nexus": "^0.3.15",
     "remix-utils": "^3.2.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.10.0",
+    "@cloudflare/workers-types": "^3.11.0",
+    "@cloudflare/wrangler": "^1.19.12",
     "@hakatashi/eslint-config": "hakatashi/eslint-config#v1.19.0",
     "@remix-run/dev": "^1.5.1",
     "@remix-run/eslint-config": "^1.5.1",
-    "@types/react": "^18.0.9",
+    "@types/react": "^18.0.11",
     "@types/react-dom": "^18.0.5",
     "@types/uuid": "^8.3.4",
-    "eslint": "^8.15.0",
-    "miniflare": "^2.4.0",
+    "eslint": "^8.17.0",
+    "miniflare": "^2.5.0",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.6.4",
-    "wrangler": "^2.0.6"
+    "typescript": "^4.7.3"
   },
   "engines": {
     "node": ">=14"
