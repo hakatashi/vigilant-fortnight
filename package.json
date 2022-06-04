@@ -25,6 +25,7 @@
     "recoil": "^0.7.3",
     "recoil-nexus": "^0.3.15",
     "remix-utils": "^3.2.0",
+    "skyway-js": "^4.4.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
