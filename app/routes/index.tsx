@@ -4,9 +4,9 @@ import {Link} from '@remix-run/react';
 import {useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
-import PeerJsConnections from '~/lib/PeerJsConnections';
+import SkywayConnections from '~/lib/SkywayConnections';
+import WebsocketConnections, {rttState as websocketPeerRttState, peerIdsState, idState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
-import WebsocketConnection, {rttState as websocketPeerRttState, peerIdsState, idState} from '~/lib/websocketConnection';
 
 // import Youtube from 'react-player/youtube';
 
@@ -14,7 +14,6 @@ import WebsocketConnection, {rttState as websocketPeerRttState, peerIdsState, id
 export default function Index() {
 	const [isBigCircle, setIsBigCircle] = useState(false);
 	const clockOffset = useRecoilValue(clockOffsetState);
-	const websocketPeerRtt = useRecoilValue(websocketPeerRttState);
 	const peerIds = useRecoilValue(peerIdsState);
 	const id = useRecoilValue(idState);
 	const rtt = useRecoilValue(rttState);
@@ -39,44 +38,18 @@ export default function Index() {
 		};
 	}, []);
 
-	useEffect(() => {
-		const con = new WebsocketConnection();
-		return () => {
-			con.close();
-		};
-	}, []);
 
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
-			<h1>Welcome to Remix</h1>
-			<ul>
-				<li>
-					<a
-						target="_blank"
-						href="https://remix.run/tutorials/blog"
-						rel="noreferrer"
-					>
-						15m Quickstart Blog Tutorial
-					</a>
-				</li>
-				<li>
-					<a
-						target="_blank"
-						href="https://remix.run/tutorials/jokes"
-						rel="noreferrer"
-					>
-						Deep Dive Jokes App Tutorial
-					</a>
-				</li>
-				<li>
-					<Link to="/other">Other page</Link>
-				</li>
-			</ul>
+			<h1>Connection test page</h1>
 			<p>Clock offset: {clockOffset}ms</p>
-			<p>RTT: {rtt}ms</p>
-			<p>WebSocket Peer RTT: {websocketPeerRtt}ms</p>
+			<p>CDN RTT: {rtt}ms</p>
+			<p>ID: {id}</p>
 			<ClientOnly>
-				{() => <PeerJsConnections id={id} peerIds={peerIds}/>}
+				{() => (<>
+					<WebsocketConnections/>
+					<SkywayConnections id={id} peerIds={peerIds}/>
+				</>)}
 			</ClientOnly>
 			<div style={{
 				width: '10rem',
