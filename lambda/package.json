@@ -1,0 +1,14 @@
+{
+  "name": "intro-quiz-lambda",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Lambda implementation of intro-quiz app",
+  "author": "Koki Takahashi",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1148.0"
+  },
+  "devDependencies": {
+    "aws-lambda": "^1.0.7"
+  }
+}
