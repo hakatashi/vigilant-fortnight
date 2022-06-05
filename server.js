@@ -11,12 +11,18 @@ addEventListener(
 
 		if (path === '/ping') {
 			return event.respondWith(
-				new Response(Date.now().toString(), {
-					headers: {
-						'Content-Type': 'text/plain;charset=UTF-8',
-						'Cache-Control': 'private',
+				new Response(
+					JSON.stringify({
+						time: Date.now(),
+						lastSync: null,
+					}),
+					{
+						headers: {
+							'Content-Type': 'text/plain;charset=UTF-8',
+							'Cache-Control': 'private',
+						},
 					},
-				}),
+				),
 			);
 		}
 

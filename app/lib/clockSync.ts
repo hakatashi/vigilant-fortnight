@@ -47,7 +47,6 @@ export class ClockSync {
 
 		if (this.measuredRtts.length >= 5) {
 			this.measuredRtts = this.measuredRtts.slice(-5);
-			// eslint-disable-next-line prefer-destructuring
 			const finalRtt = median(this.measuredRtts);
 			setRecoil(rttState, finalRtt);
 		}
@@ -64,8 +63,8 @@ export class ClockSync {
 		const res = await fetch('/ping');
 		const fetchEnd = Date.now();
 
-		const text = await res.text();
-		const fetchServerStart = parseInt(text);
+		const {time} = await res.json();
+		const fetchServerStart = time;
 
 		return {fetchStart, fetchEnd, fetchServerStart};
 	}

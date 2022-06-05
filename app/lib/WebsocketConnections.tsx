@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {atom, useRecoilValue} from 'recoil';
 import {setRecoil} from 'recoil-nexus';
 import {v4 as uuid} from 'uuid';
-import {Deferred, median} from './utils';
+import {median} from './utils';
 
 export const rttState = atom<number>({
 	key: 'lib.websocketConnections.rtt',
@@ -83,7 +83,7 @@ class WebsocketConnection {
 		try {
 			data = JSON.parse(event.data);
 		} catch (error) {
-			console.error('websocket message couldn\'t parsed');
+			console.error('websocket message couldn\'t be parsed');
 			return;
 		}
 
@@ -106,11 +106,15 @@ class WebsocketConnection {
 				});
 			}
 		} else if (data.type === 'pong') {
-			if (data.src !== this.id || !this.pings.has(data.seq)) {
+			if (data.src !== this.id) {
 				return;
 			}
 
-			const sendTime = this.pings.get(data.seq)!;
+			const sendTime = this.pings.get(data.seq);
+
+			if (sendTime === undefined) {
+				return;
+			}
 
 			const rtt = time - sendTime;
 			console.log(`websocket peer RTT for ${data.dst}: ${rtt}ms`);
@@ -122,7 +126,6 @@ class WebsocketConnection {
 
 			if (this.rtts[data.dst].length >= 5) {
 				this.rtts[data.dst] = this.rtts[data.dst].slice(-15);
-				// eslint-disable-next-line prefer-destructuring
 				const finalRtt = median(this.rtts[data.dst]);
 				setRecoil(peersState, (state) => ({
 					...state,
@@ -149,7 +152,6 @@ class WebsocketConnection {
 
 // eslint-disable-next-line react/function-component-definition
 export default function WebsocketConnections() {
-	// eslint-disable-next-line react/hook-use-state
 	const peers = useRecoilValue(peersState);
 
 	useEffect(() => {
