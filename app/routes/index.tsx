@@ -1,11 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-import {Link} from '@remix-run/react';
 import {useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
 import SkywayConnections from '~/lib/SkywayConnections';
-import WebsocketConnections, {rttState as websocketPeerRttState, peerIdsState, idState} from '~/lib/WebsocketConnections';
+import WebsocketConnections, {peerIdsState, idState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
 
 // import Youtube from 'react-player/youtube';
@@ -46,10 +45,12 @@ export default function Index() {
 			<p>CDN RTT: {rtt}ms</p>
 			<p>ID: {id}</p>
 			<ClientOnly>
-				{() => (<>
-					<WebsocketConnections/>
-					<SkywayConnections id={id} peerIds={peerIds}/>
-				</>)}
+				{() => (
+					<>
+						<WebsocketConnections/>
+						<SkywayConnections id={id} peerIds={peerIds}/>
+					</>
+				)}
 			</ClientOnly>
 			<div style={{
 				width: '10rem',
