@@ -1,8 +1,13 @@
-import {useEffect} from 'react';
-import {atom, useRecoilValue} from 'recoil';
+import {atom} from 'recoil';
 import {setRecoil} from 'recoil-nexus';
 import {v4 as uuid} from 'uuid';
+import ButtonManager from './ButtonManager';
 import {median} from './utils';
+
+export const wsState = atom<WebsocketConnection | null>({
+	key: 'lib.websocketConnections.ws',
+	default: null,
+});
 
 export const rttState = atom<number>({
 	key: 'lib.websocketConnections.rtt',
@@ -24,16 +29,16 @@ export const peersState = atom<{[id: string]: number}>({
 	default: {},
 });
 
-class WebsocketConnection {
+export class WebsocketConnection {
 	ws: WebSocket;
 
-	intervalId: NodeJS.Timer | null = null;
+	#intervalId: NodeJS.Timer | null = null;
 
 	pings: Map<number, number> = new Map();
 
 	id: string = uuid();
 
-	seq = 0;
+	#seq = 0;
 
 	rtts: {[id: string]: number[]} = {};
 
@@ -53,7 +58,7 @@ class WebsocketConnection {
 
 	onOpen() {
 		console.log('connected to websocket');
-		this.intervalId = setInterval(() => {
+		this.#intervalId = setInterval(() => {
 			this.ping();
 		}, 1000);
 	}
@@ -63,12 +68,12 @@ class WebsocketConnection {
 		this.send({
 			type: 'ping',
 			src: this.id,
-			seq: this.seq,
+			seq: this.#seq,
 		});
 
-		this.pings.set(this.seq, time);
+		this.pings.set(this.#seq, time);
 
-		this.seq++;
+		this.#seq++;
 	}
 
 	onMessage(event: MessageEvent) {
@@ -144,31 +149,12 @@ class WebsocketConnection {
 
 	close() {
 		this.ws.close();
-		if (this.intervalId) {
-			clearInterval(this.intervalId);
+		if (this.#intervalId) {
+			clearInterval(this.#intervalId);
 		}
 	}
-}
 
-// eslint-disable-next-line react/function-component-definition
-export default function WebsocketConnections() {
-	const peers = useRecoilValue(peersState);
-
-	useEffect(() => {
-		const con = new WebsocketConnection();
-		return () => {
-			con.close();
-		};
-	}, []);
-
-	return (
-		<>
-			<p>WebSocket Peers:</p>
-			<ul>
-				{Object.entries(peers).map(([peerId, rtt]) => (
-					<li key={peerId}>{peerId}: {rtt}ms</li>
-				))}
-			</ul>
-		</>
-	);
+	getButton(buttonId: string) {
+		return new ButtonManager(buttonId);
+	}
 }

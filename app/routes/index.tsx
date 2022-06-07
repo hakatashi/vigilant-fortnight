@@ -1,10 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 
+import noop from 'lodash/noop';
 import {useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
 import SkywayConnections from '~/lib/SkywayConnections';
-import WebsocketConnections, {peerIdsState, idState} from '~/lib/WebsocketConnections';
+import {peerIdsState, idState, wsState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
 
 // import Youtube from 'react-player/youtube';
@@ -16,6 +17,7 @@ export default function Index() {
 	const peerIds = useRecoilValue(peerIdsState);
 	const id = useRecoilValue(idState);
 	const rtt = useRecoilValue(rttState);
+	const ws = useRecoilValue(wsState);
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
@@ -31,12 +33,22 @@ export default function Index() {
 	}, [isBigCircle, setIsBigCircle, clockOffset]);
 
 	useEffect(() => {
+		if (!ws) {
+			return noop;
+		}
+
+		const button = ws.getButton('hoge');
+		return () => {
+			button.quit();
+		};
+	}, [ws]);
+
+	useEffect(() => {
 		const clockSync = new ClockSync();
 		return () => {
 			clockSync.teardown();
 		};
 	}, []);
-
 
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
@@ -46,10 +58,7 @@ export default function Index() {
 			<p>ID: {id}</p>
 			<ClientOnly>
 				{() => (
-					<>
-						<WebsocketConnections/>
-						<SkywayConnections id={id} peerIds={peerIds}/>
-					</>
+					<SkywayConnections id={id} peerIds={peerIds}/>
 				)}
 			</ClientOnly>
 			<div style={{

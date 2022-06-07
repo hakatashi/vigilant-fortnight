@@ -5,11 +5,14 @@ export interface WebsocketEvent {
 }
 
 export default class ButtonManager {
+	buttonId: string;
+
 	pushTime: number | null = null;
 
 	onMessageSend: (message: WebsocketEvent) => void;
 
-	constructor(onMessageSend = noop) {
+	constructor(buttonId: string, onMessageSend = noop) {
+		this.buttonId = buttonId;
 		this.pushTime = null;
 		this.onMessageSend = onMessageSend;
 	}
@@ -19,10 +22,12 @@ export default class ButtonManager {
 
 	push(time = Date.now()) {
 		this.pushTime = time;
-		this.push();
 	}
 
 	get isPushed() {
 		return this.pushTime !== null;
+	}
+
+	quit() {
 	}
 }
