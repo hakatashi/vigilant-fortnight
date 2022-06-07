@@ -73,7 +73,7 @@ const service: AWS = {
 			ConnectionsTable: {
 				Type: 'AWS::DynamoDB::Table',
 				Properties: {
-					TableName: 'simplechat_connections',
+					TableName: 'introquiz_connections',
 					AttributeDefinitions: [
 						{
 							AttributeName: 'connectionId',
@@ -87,8 +87,33 @@ const service: AWS = {
 						},
 					],
 					ProvisionedThroughput: {
-						ReadCapacityUnits: 5,
-						WriteCapacityUnits: 5,
+						ReadCapacityUnits: 2,
+						WriteCapacityUnits: 2,
+					},
+					SSESpecification: {
+						SSEEnabled: true,
+					},
+				},
+			},
+			ButtonsTable: {
+				Type: 'AWS::DynamoDB::Table',
+				Properties: {
+					TableName: 'introquiz_buttons',
+					AttributeDefinitions: [
+						{
+							AttributeName: 'buttonId',
+							AttributeType: 'S',
+						},
+					],
+					KeySchema: [
+						{
+							AttributeName: 'buttonId',
+							KeyType: 'HASH',
+						},
+					],
+					ProvisionedThroughput: {
+						ReadCapacityUnits: 2,
+						WriteCapacityUnits: 2,
 					},
 					SSESpecification: {
 						SSEEnabled: true,
