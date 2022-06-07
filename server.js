@@ -1,4 +1,5 @@
 import {createEventHandler} from '@remix-run/cloudflare-workers';
+// eslint-disable-next-line import/no-namespace
 import * as build from '@remix-run/dev/server-build';
 
 const remixEventHandler = createEventHandler({build, mode: process.env.NODE_ENV});
