@@ -10,6 +10,31 @@ import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
 
 // import Youtube from 'react-player/youtube';
 
+
+const useFriendStatus = (friendID) => {
+	const [isOnline, setIsOnline] = useState<boolean>(false);
+
+	const handleStatusChange = (status: boolean) => {
+		setIsOnline(status);
+	};
+
+	useEffect(() => {
+		console.log(`Subscribed to ${friendID}`, handleStatusChange);
+		return () => {
+			console.log(`Unsubscribed to ${friendID}`, handleStatusChange);
+		};
+	}, [friendID]);
+
+	return isOnline;
+};
+
+const Friend = ({friendID}: {friendID: number}) => {
+	const isOnline = useFriendStatus(friendID);
+	return (
+		<p>{friendID}: {isOnline}</p>
+	);
+};
+
 // eslint-disable-next-line react/function-component-definition
 export default function Index() {
 	const [isBigCircle, setIsBigCircle] = useState(false);
@@ -23,14 +48,12 @@ export default function Index() {
 		const intervalId = setInterval(() => {
 			const syncedTime = Date.now() + clockOffset;
 			const newIsBigCircle = Math.floor(syncedTime / 3000) % 2 === 0;
-			if (isBigCircle !== newIsBigCircle) {
-				setIsBigCircle(newIsBigCircle);
-			}
+			setIsBigCircle(newIsBigCircle);
 		}, 10);
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [isBigCircle, setIsBigCircle, clockOffset]);
+	}, [clockOffset]);
 
 	useEffect(() => {
 		if (!ws) {
@@ -53,6 +76,13 @@ export default function Index() {
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Connection test page</h1>
+			<Friend friendID={1}/>
+			<Friend friendID={2}/>
+			<Friend friendID={2}/>
+			<Friend friendID={1}/>
+			<Friend friendID={1}/>
+			<Friend friendID={3}/>
+			<Friend friendID={1}/>
 			<p>Clock offset: {clockOffset}ms</p>
 			<p>CDN RTT: {rtt}ms</p>
 			<p>ID: {id}</p>
