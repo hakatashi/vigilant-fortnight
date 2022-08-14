@@ -38,7 +38,7 @@ const service: AWS = {
 	},
 	functions: {
 		connect: {
-			handler: 'onconnect/app.handler',
+			handler: 'onconnect.handler',
 			events: [
 				{
 					websocket: {
@@ -48,7 +48,7 @@ const service: AWS = {
 			],
 		},
 		disconnect: {
-			handler: 'ondisconnect/app.handler',
+			handler: 'ondisconnect.handler',
 			events: [
 				{
 					websocket: {
@@ -58,7 +58,7 @@ const service: AWS = {
 			],
 		},
 		sendmessage: {
-			handler: 'sendmessage/app.handler',
+			handler: 'sendmessage.handler',
 			events: [
 				{
 					websocket: {
@@ -73,7 +73,7 @@ const service: AWS = {
 			ConnectionsTable: {
 				Type: 'AWS::DynamoDB::Table',
 				Properties: {
-					TableName: 'introquiz_connections',
+					TableName: 'introquiz_connections_${self:provider.stage}',
 					AttributeDefinitions: [
 						{
 							AttributeName: 'connectionId',
@@ -98,7 +98,7 @@ const service: AWS = {
 			ButtonsTable: {
 				Type: 'AWS::DynamoDB::Table',
 				Properties: {
-					TableName: 'introquiz_buttons',
+					TableName: 'introquiz_buttons_${self:provider.stage}',
 					AttributeDefinitions: [
 						{
 							AttributeName: 'buttonId',
