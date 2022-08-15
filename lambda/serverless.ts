@@ -31,6 +31,9 @@ const service: AWS = {
 			CONNECTIONS_TABLE: {
 				Ref: 'ConnectionsTable',
 			},
+			BUTTONS_TABLE: {
+				Ref: 'ButtonsTable',
+			},
 		},
 		profile: 'serverless',
 		websocketsApiName: '${self:service}',
@@ -63,6 +66,16 @@ const service: AWS = {
 				{
 					websocket: {
 						route: 'sendmessage',
+					},
+				},
+			],
+		},
+		bidbutton: {
+			handler: 'bidbutton.handler',
+			events: [
+				{
+					websocket: {
+						route: 'bidbutton',
 					},
 				},
 			],

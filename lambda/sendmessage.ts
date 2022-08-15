@@ -1,25 +1,14 @@
 import type {APIGatewayEvent} from 'aws-lambda';
 import AWS from 'aws-sdk';
 import type {AWSError} from 'aws-sdk';
-
-const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10', region: process.env.AWS_REGION});
-const {CONNECTIONS_TABLE = ''} = process.env;
+import {getConnections, deleteConnection} from './lib/db'
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = async (event: APIGatewayEvent) => {
-	let connectionData = null;
+	const connections = await getConnections();
 
-	try {
-		connectionData = await db.scan({
-			TableName: CONNECTIONS_TABLE,
-			ProjectionExpression: 'connectionId',
-		}).promise();
-	} catch (error) {
-		return {statusCode: 500, body: error instanceof Error ? error.stack : 'Unknown Error'};
-	}
-
-	if (connectionData.Items === undefined) {
-		return {statusCode: 500, body: 'Connection data not found'};
+	if (connections.length === 0) {
+		return {statusCode: 500, body: 'Connections data not found'};
 	}
 
 	const apigwManagementApi = new AWS.ApiGatewayManagementApi({
@@ -29,7 +18,7 @@ export const handler = async (event: APIGatewayEvent) => {
 
 	const postData = JSON.parse(event.body ?? '{}').data;
 
-	const postCalls = connectionData.Items.map(async ({connectionId}) => {
+	const postCalls = connections.map(async ({connectionId}) => {
 		try {
 			await apigwManagementApi.postToConnection({
 				ConnectionId: connectionId,
@@ -38,7 +27,7 @@ export const handler = async (event: APIGatewayEvent) => {
 		} catch (error) {
 			if ((error as AWSError).statusCode === 410) {
 				console.log(`Found stale connection, deleting ${connectionId}`);
-				await db.delete({TableName: CONNECTIONS_TABLE, Key: {connectionId}}).promise();
+				await deleteConnection(connectionId);
 			} else {
 				throw error;
 			}
