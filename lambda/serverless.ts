@@ -28,7 +28,7 @@ const service: AWS = {
 			},
 		],
 		environment: {
-			TABLE_NAME: {
+			CONNECTIONS_TABLE: {
 				Ref: 'ConnectionsTable',
 			},
 		},

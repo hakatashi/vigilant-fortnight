@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 import type {AWSError} from 'aws-sdk';
 
 const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10', region: process.env.AWS_REGION});
-const {TABLE_NAME = ''} = process.env;
+const {CONNECTIONS_TABLE = ''} = process.env;
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = async (event: APIGatewayEvent) => {
@@ -11,7 +11,7 @@ export const handler = async (event: APIGatewayEvent) => {
 
 	try {
 		connectionData = await db.scan({
-			TableName: TABLE_NAME,
+			TableName: CONNECTIONS_TABLE,
 			ProjectionExpression: 'connectionId',
 		}).promise();
 	} catch (error) {
@@ -38,7 +38,7 @@ export const handler = async (event: APIGatewayEvent) => {
 		} catch (error) {
 			if ((error as AWSError).statusCode === 410) {
 				console.log(`Found stale connection, deleting ${connectionId}`);
-				await db.delete({TableName: TABLE_NAME, Key: {connectionId}}).promise();
+				await db.delete({TableName: CONNECTIONS_TABLE, Key: {connectionId}}).promise();
 			} else {
 				throw error;
 			}

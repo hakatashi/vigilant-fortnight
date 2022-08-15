@@ -4,12 +4,12 @@ import type {APIGatewayEvent} from 'aws-lambda';
 import AWS from 'aws-sdk';
 
 const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10', region: process.env.AWS_REGION});
-const {TABLE_NAME = ''} = process.env;
+const {CONNECTIONS_TABLE = ''} = process.env;
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = async (event: APIGatewayEvent) => {
 	const deleteParams = {
-		TableName: TABLE_NAME,
+		TableName: CONNECTIONS_TABLE,
 		Key: {
 			connectionId: event.requestContext.connectionId,
 		},
