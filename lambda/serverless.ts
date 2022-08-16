@@ -80,6 +80,17 @@ const service: AWS = {
 				},
 			],
 		},
+		createbutton: {
+			handler: 'createbutton.handler',
+			events: [
+				{
+					http: {
+						path: 'button',
+						method: 'put',
+					},
+				},
+			],
+		},
 	},
 	resources: {
 		Resources: {

@@ -1,9 +1,7 @@
 import type {APIGatewayEvent} from 'aws-lambda';
 import AWS from 'aws-sdk';
 import type {AWSError} from 'aws-sdk';
-import {addBidToButton, db, deleteConnection, getButton, getConnections} from './lib/db'
-
-const {CONNECTIONS_TABLE = '', BUTTONS_TABLE = ''} = process.env;
+import {addBidToButton, deleteConnection, getButton, getConnections} from './lib/db'
 
 interface Body {
 	buttonId: string,
@@ -12,6 +10,7 @@ interface Body {
 
 const validate = (data: any): data is Body => ( 
 	data !== null &&
+		data !== undefined &&
 		typeof data.buttonId === 'string' && 
 		typeof data.timestamp === 'number' &&
 		Number.isInteger(data.timestamp)

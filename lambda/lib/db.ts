@@ -31,6 +31,18 @@ export const getButton = async (buttonId: string) => {
 	return button.Item;
 }
 
+export const createButton = async (buttonId: string, createdAt: number, connectionId: string) => ( 
+	db.put({
+		TableName: BUTTONS_TABLE,
+		Item: {
+			buttonId,
+			connectionId,
+			createdAt,
+			bids: [],
+		},
+	}).promise()
+);
+
 export const addBidToButton = async (buttonId: string, user: string, timestamp: number) => (
 	db.update({
 		TableName: BUTTONS_TABLE,
