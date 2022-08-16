@@ -24,6 +24,12 @@ const service: AWS = {
 							'Arn',
 						],
 					},
+					{
+						'Fn::GetAtt': [
+							'ButtonsTable',
+							'Arn',
+						],
+					},
 				],
 			},
 		],
@@ -87,6 +93,7 @@ const service: AWS = {
 					http: {
 						path: 'button',
 						method: 'put',
+						cors: true,
 					},
 				},
 			],

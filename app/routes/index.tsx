@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import noop from 'lodash/noop';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
 import SkywayConnections from '~/lib/SkywayConnections';
@@ -73,6 +73,18 @@ export default function Index() {
 		};
 	}, []);
 
+	const handleClickButton = useCallback(async () => {
+		const res = await fetch('https://byxiq5c6wj.execute-api.ap-northeast-1.amazonaws.com/dev/button', {
+			method: 'PUT',
+			mode: 'cors',
+			body: JSON.stringify({
+				connectionId: id,
+			}),
+		});
+		const data = await res.json();
+		console.log(data);
+	}, [id]);
+
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Connection test page</h1>
@@ -91,6 +103,7 @@ export default function Index() {
 					<SkywayConnections id={id} peerIds={peerIds}/>
 				)}
 			</ClientOnly>
+			<button onClick={handleClickButton}>Create Button</button>
 			<div style={{
 				width: '10rem',
 				height: '10rem',
