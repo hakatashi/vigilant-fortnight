@@ -9,7 +9,9 @@ type Mutation {
 type Button {
   id: ID!
   connectionId: ID!
-  bids: [Bid],
+  bids: [Bid]
+  createdAt: Int
+  updatedAt: Int
 }
 
 type Bid {
