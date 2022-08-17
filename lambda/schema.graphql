@@ -3,7 +3,7 @@ type Query {
 }
 
 type Mutation {
-  createButton(input: CreateButtonInput!): Button
+  createButton(connectionId: ID!): Button
 }
 
 type Button {
@@ -17,8 +17,4 @@ type Button {
 type Bid {
   user: String!
   timestamp: String!
-}
-
-input CreateButtonInput {
-  connectionId: ID
 }

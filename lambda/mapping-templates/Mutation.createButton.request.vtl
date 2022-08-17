@@ -1,23 +1,20 @@
-$util.qr($context.args.input.put("createdAt", $util.time.nowEpochSeconds()))
-$util.qr($context.args.input.put("updatedAt", $util.time.nowEpochSeconds()))
-$util.qr($context.args.input.put("bids", $util.dynamodb.toList([])))
-$util.qr($context.args.input.put("__typename", "Button"))
-
-#set(
-  $condition = {
-    "expression": "attribute_not_exists(#id)",
-    "expressionNames": {
-      "#id": "id"
-    }
-  }
-)
-
 {
   "version": "2017-02-28",
   "operation": "PutItem",
   "key": {
     "id": $util.dynamodb.toDynamoDBJson($util.autoId()),
   },
-  "attributeValues": $util.dynamodb.toMapValuesJson($context.args.input),
-  "condition": $util.toJson($condition)
+  "attributeValues": $util.dynamodb.toMapValuesJson({
+    "createdAt": $util.time.nowEpochSeconds(),
+    "updatedAt": $util.time.nowEpochSeconds(),
+    "connectionId": $context.args.connectionId,
+    "bids": [],
+    "__typename": "Button"
+  }),
+  "condition": $util.toJson({
+    "expression": "attribute_not_exists(#id)",
+    "expressionNames": {
+      "#id": "id"
+    }
+  })
 }
