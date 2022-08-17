@@ -74,7 +74,7 @@ export default function Index() {
 	}, []);
 
 	const handleClickButton = useCallback(async () => {
-		const res = await fetch('https://byxiq5c6wj.execute-api.ap-northeast-1.amazonaws.com/dev/button', {
+		const res = await fetch('https://dyi126p82g.execute-api.ap-northeast-1.amazonaws.com/dev/button', {
 			method: 'PUT',
 			mode: 'cors',
 			body: JSON.stringify({

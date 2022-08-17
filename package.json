@@ -26,6 +26,7 @@
     "recoil": "^0.7.5",
     "recoil-nexus": "^0.4.0",
     "remix-utils": "^3.3.0",
+    "serverless-appsync-plugin": "^1.14.0",
     "skyway-js": "^4.4.5",
     "uuid": "^8.3.2"
   },

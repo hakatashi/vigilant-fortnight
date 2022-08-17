@@ -45,7 +45,7 @@ export class WebsocketConnection {
 	peerIds: Set<string> = new Set();
 
 	constructor() {
-		this.ws = new WebSocket('wss://nlazlgwoch.execute-api.ap-northeast-1.amazonaws.com/dev');
+		this.ws = new WebSocket('wss://9sl8b3q8jk.execute-api.ap-northeast-1.amazonaws.com/dev');
 		this.ws.addEventListener('open', () => {
 			this.onOpen();
 		});

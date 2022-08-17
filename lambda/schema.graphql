@@ -1,0 +1,22 @@
+type Query {
+  button(id: ID!): Button
+}
+
+type Mutation {
+  createButton(input: CreateButtonInput!): Button
+}
+
+type Button {
+  id: ID!
+  connectionId: ID!
+  bids: [Bid],
+}
+
+type Bid {
+  user: String!
+  timestamp: String!
+}
+
+input CreateButtonInput {
+  connectionId: ID
+}

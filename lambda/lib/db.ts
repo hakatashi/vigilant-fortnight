@@ -1,6 +1,5 @@
 
 import AWS from 'aws-sdk';
-import type {AWSError} from 'aws-sdk';
 
 const {CONNECTIONS_TABLE = '', BUTTONS_TABLE = ''} = process.env;
 
@@ -35,7 +34,7 @@ export const createButton = async (buttonId: string, createdAt: number, connecti
 	db.put({
 		TableName: BUTTONS_TABLE,
 		Item: {
-			buttonId,
+			id: buttonId,
 			connectionId,
 			createdAt,
 			bids: [],
