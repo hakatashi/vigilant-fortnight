@@ -4,6 +4,7 @@ import noop from 'lodash/noop';
 import {useCallback, useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
+import {useQuery} from 'urql';
 import SkywayConnections from '~/lib/SkywayConnections';
 import {peerIdsState, idState, wsState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
@@ -73,6 +74,19 @@ export default function Index() {
 		};
 	}, []);
 
+	const [{data}] = useQuery({
+		query: `
+			query {
+				button(id: "07920555-db03-4f5b-93ca-2f00425d8538") {
+					id
+					connectionId
+					createdAt
+					updatedAt
+				}
+			}
+		`,
+	});
+
 	const handleClickButton = useCallback(async () => {
 		const res = await fetch('https://dyi126p82g.execute-api.ap-northeast-1.amazonaws.com/dev/button', {
 			method: 'PUT',
@@ -88,6 +102,7 @@ export default function Index() {
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Connection test page</h1>
+			<p>Data: {JSON.stringify(data)}</p>
 			<Friend friendID={1}/>
 			<Friend friendID={2}/>
 			<Friend friendID={2}/>
@@ -103,7 +118,7 @@ export default function Index() {
 					<SkywayConnections id={id} peerIds={peerIds}/>
 				)}
 			</ClientOnly>
-			<button onClick={handleClickButton}>Create Button</button>
+			<button type="button" onClick={handleClickButton}>Create Button</button>
 			<div style={{
 				width: '10rem',
 				height: '10rem',

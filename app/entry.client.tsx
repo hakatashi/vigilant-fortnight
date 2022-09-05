@@ -4,8 +4,8 @@ import {hydrateRoot} from 'react-dom/client';
 import {RecoilRoot, useSetRecoilState} from 'recoil';
 import RecoilNexus from 'recoil-nexus';
 import {Provider} from 'urql';
-import {client} from './lib/graphql';
 import {WebsocketConnection, wsState} from './lib/WebsocketConnections';
+import {client} from './lib/graphql';
 
 const ClientRoot = ({children}: React.PropsWithChildren<unknown>) => {
 	const setWs = useSetRecoilState(wsState);
