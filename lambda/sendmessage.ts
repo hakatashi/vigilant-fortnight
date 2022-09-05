@@ -1,7 +1,7 @@
 import type {APIGatewayEvent} from 'aws-lambda';
 import AWS from 'aws-sdk';
 import type {AWSError} from 'aws-sdk';
-import {getConnections, deleteConnection} from './lib/db'
+import {getConnections, deleteConnection} from './lib/db';
 
 // eslint-disable-next-line import/prefer-default-export
 export const handler = async (event: APIGatewayEvent) => {

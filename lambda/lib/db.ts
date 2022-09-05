@@ -11,14 +11,14 @@ export const getConnections = async () => {
 		ProjectionExpression: 'connectionId',
 	}).promise();
 	return connectionsData.Items ?? [];
-}
+};
 
 export const deleteConnection = (connectionId: string) => (
 	db.delete({
 		TableName: CONNECTIONS_TABLE,
 		Key: {connectionId},
 	}).promise()
-)
+);
 
 export const getButton = async (buttonId: string) => {
 	const button = await db.get({
@@ -28,9 +28,9 @@ export const getButton = async (buttonId: string) => {
 		},
 	}).promise();
 	return button.Item;
-}
+};
 
-export const createButton = async (buttonId: string, createdAt: number, connectionId: string) => ( 
+export const createButton = async (buttonId: string, createdAt: number, connectionId: string) => (
 	db.put({
 		TableName: BUTTONS_TABLE,
 		Item: {
@@ -52,6 +52,6 @@ export const addBidToButton = async (buttonId: string, user: string, timestamp: 
 		ExpressionAttributeValues: {
 			':bid': [{user, timestamp}],
 		},
-		ReturnValues: "UPDATED_NEW",
+		ReturnValues: 'UPDATED_NEW',
 	})
 );

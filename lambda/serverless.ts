@@ -220,15 +220,15 @@ const service: AWS = {
 			schema: 'schema.graphql',
 			apiKeys: [
 				{
-					name: "test-api-key",
-					description: "Test API Key",
-					expiresAfter: "30d",
+					name: 'test-api-key',
+					description: 'Test API Key',
+					expiresAfter: '30d',
 				},
 			],
 			defaultMappingTemplates: {
 				request: 'start.vtl',
 				response: 'end.vtl',
-			}, 
+			},
 			dataSources: [
 				{
 					type: 'AMAZON_DYNAMODB',

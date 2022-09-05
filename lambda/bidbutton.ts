@@ -1,17 +1,17 @@
 import type {APIGatewayEvent} from 'aws-lambda';
 import AWS from 'aws-sdk';
 import type {AWSError} from 'aws-sdk';
-import {addBidToButton, deleteConnection, getButton, getConnections} from './lib/db'
+import {addBidToButton, deleteConnection, getButton, getConnections} from './lib/db';
 
 interface Body {
 	buttonId: string,
 	timestamp: number,
 }
 
-const validate = (data: any): data is Body => ( 
+const validate = (data: any): data is Body => (
 	data !== null &&
 		data !== undefined &&
-		typeof data.buttonId === 'string' && 
+		typeof data.buttonId === 'string' &&
 		typeof data.timestamp === 'number' &&
 		Number.isInteger(data.timestamp)
 );

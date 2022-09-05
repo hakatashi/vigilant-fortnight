@@ -1,12 +1,12 @@
 import type {APIGatewayEvent} from 'aws-lambda';
-import {createButton} from './lib/db';
 import uniqid from 'uniqid';
+import {createButton} from './lib/db';
 
 interface Body {
 	connectionId: string,
 }
 
-const validate = (data: any): data is Body => ( 
+const validate = (data: any): data is Body => (
 	data !== null &&
 		data !== undefined &&
 		typeof data.connectionId === 'string'
