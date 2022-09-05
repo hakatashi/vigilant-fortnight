@@ -20,6 +20,7 @@
     "@remix-run/cloudflare-workers": "^1.6.8",
     "@remix-run/react": "^1.6.8",
     "cross-env": "^7.0.3",
+    "graphql": "^14.7.0",
     "peerjs": "^1.4.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -29,6 +30,7 @@
     "remix-utils": "^3.3.0",
     "serverless-appsync-plugin": "^1.14.0",
     "skyway-js": "^4.4.5",
+    "urql": "^2.2.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

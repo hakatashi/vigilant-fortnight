@@ -3,6 +3,8 @@ import React, {useEffect} from 'react';
 import {hydrateRoot} from 'react-dom/client';
 import {RecoilRoot, useSetRecoilState} from 'recoil';
 import RecoilNexus from 'recoil-nexus';
+import {Provider} from 'urql';
+import {client} from './lib/graphql';
 import {WebsocketConnection, wsState} from './lib/WebsocketConnections';
 
 const ClientRoot = ({children}: React.PropsWithChildren<unknown>) => {
@@ -30,8 +32,10 @@ hydrateRoot(
 	document,
 	<RecoilRoot>
 		<ClientRoot>
-			<RecoilNexus/>
-			<RemixBrowser/>
+			<Provider value={client}>
+				<RecoilNexus/>
+				<RemixBrowser/>
+			</Provider>
 		</ClientRoot>
 	</RecoilRoot>,
 );
