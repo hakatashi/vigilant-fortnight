@@ -1,7 +1,6 @@
-/* eslint-disable react/react-in-jsx-scope */
-
 import noop from 'lodash/noop';
 import {useCallback, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
 import {useCreateButtonMutation, useGetButtonQuery} from '~/generated/graphql';
@@ -9,7 +8,6 @@ import SkywayConnections from '~/lib/SkywayConnections';
 import {peerIdsState, idState, wsState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
 
-// eslint-disable-next-line react/function-component-definition
 export default function Index() {
 	const [isBigCircle, setIsBigCircle] = useState(false);
 	const clockOffset = useRecoilValue(clockOffsetState);
@@ -17,6 +15,7 @@ export default function Index() {
 	const id = useRecoilValue(idState);
 	const rtt = useRecoilValue(rttState);
 	const ws = useRecoilValue(wsState);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
@@ -57,8 +56,8 @@ export default function Index() {
 
 	const handleClickButton = useCallback(async () => {
 		const result = await createButton({connectionId: id});
-		console.log(result);
-	}, [id, createButton]);
+		navigate(`/buttons/${result.data?.createButton?.id}`);
+	}, [id, createButton, navigate]);
 
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>

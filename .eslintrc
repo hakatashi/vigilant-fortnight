@@ -7,7 +7,8 @@
   "rules": {
     "require-jsdoc": "off",
     "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/function-component-definition": "off"
   },
   "globals": {
     "NodeJS": true
