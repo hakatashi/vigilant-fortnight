@@ -1,7 +1,6 @@
 import {atom} from 'recoil';
 import {setRecoil} from 'recoil-nexus';
 import {v4 as uuid} from 'uuid';
-import ButtonManager from './ButtonManager';
 import {median} from './utils';
 
 export const wsState = atom<WebsocketConnection | null>({
@@ -65,7 +64,7 @@ export class WebsocketConnection {
 
 	ping() {
 		const time = Date.now();
-		this.send({
+		this.sendMessage({
 			type: 'ping',
 			src: this.id,
 			seq: this.#seq,
@@ -103,7 +102,7 @@ export class WebsocketConnection {
 
 		if (data.type === 'ping') {
 			if (data.src !== this.id) {
-				this.send({
+				this.sendMessage({
 					type: 'pong',
 					src: data.src,
 					dst: this.id,
@@ -140,11 +139,15 @@ export class WebsocketConnection {
 		}
 	}
 
-	send(data: any) {
-		this.ws.send(JSON.stringify({
+	sendMessage(data: any) {
+		this.send({
 			message: 'sendmessage',
 			data: JSON.stringify(data),
-		}));
+		});
+	}
+
+	send(data: any) {
+		this.ws.send(JSON.stringify(data));
 	}
 
 	close() {
@@ -152,9 +155,5 @@ export class WebsocketConnection {
 		if (this.#intervalId) {
 			clearInterval(this.#intervalId);
 		}
-	}
-
-	getButton(buttonId: string) {
-		return new ButtonManager(buttonId);
 	}
 }

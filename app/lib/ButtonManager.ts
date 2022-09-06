@@ -1,7 +1,10 @@
 import noop from 'lodash/noop';
+import {getRecoil} from 'recoil-nexus';
+import {wsState} from './WebsocketConnections';
 
 export interface WebsocketEvent {
-	type: string,
+	message: string,
+	data: string,
 }
 
 export default class ButtonManager {
@@ -22,6 +25,13 @@ export default class ButtonManager {
 
 	push(time = Date.now()) {
 		this.pushTime = time;
+		this.sendEvent({
+			message: 'bidbutton',
+			data: JSON.stringify({
+				buttonId: this.buttonId,
+				timestamp: time,
+			}),
+		});
 	}
 
 	get isPushed() {
@@ -29,5 +39,10 @@ export default class ButtonManager {
 	}
 
 	quit() {
+	}
+
+	private sendEvent(message: WebsocketEvent) {
+		const ws = getRecoil(wsState);
+		ws?.send(message);
 	}
 }

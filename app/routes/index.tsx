@@ -1,11 +1,10 @@
-import noop from 'lodash/noop';
 import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
 import {useCreateButtonMutation, useGetButtonQuery} from '~/generated/graphql';
 import SkywayConnections from '~/lib/SkywayConnections';
-import {peerIdsState, idState, wsState} from '~/lib/WebsocketConnections';
+import {peerIdsState, idState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
 
 export default function Index() {
@@ -14,7 +13,6 @@ export default function Index() {
 	const peerIds = useRecoilValue(peerIdsState);
 	const id = useRecoilValue(idState);
 	const rtt = useRecoilValue(rttState);
-	const ws = useRecoilValue(wsState);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -27,17 +25,6 @@ export default function Index() {
 			clearInterval(intervalId);
 		};
 	}, [clockOffset]);
-
-	useEffect(() => {
-		if (!ws) {
-			return noop;
-		}
-
-		const button = ws.getButton('hoge');
-		return () => {
-			button.quit();
-		};
-	}, [ws]);
 
 	useEffect(() => {
 		const clockSync = new ClockSync();
