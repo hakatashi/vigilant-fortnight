@@ -128,7 +128,7 @@ export class WebsocketConnection {
 			}
 			this.rtts[data.dst].push(rtt);
 
-			if (this.rtts[data.dst].length >= 5) {
+			if (this.rtts[data.dst].length > 0) {
 				this.rtts[data.dst] = this.rtts[data.dst].slice(-15);
 				const finalRtt = median(this.rtts[data.dst]);
 				setRecoil(peersState, (state) => ({

@@ -1,25 +1,25 @@
 #set($values = $util.dynamodb.toMapValues({
-  "createdAt": $util.time.nowEpochSeconds(),
-  "updatedAt": $util.time.nowEpochSeconds(),
-  "connectionId": $context.args.connectionId,
-  "bids": [],
-  "__typename": "Button"
+	"createdAt": $util.time.nowEpochSeconds(),
+	"updatedAt": $util.time.nowEpochSeconds(),
+	"connectionId": $context.args.connectionId,
+	"bids": [],
+	"__typename": "Button"
 }))
 
 ## DynamoDB String Set does not support empty set. So we use underscore as a placeholder.
 #set($values["bidUsers"] = $util.dynamodb.toStringSet(["_"]))
 
 {
-  "version": "2017-02-28",
-  "operation": "PutItem",
-  "key": {
-    "id": $util.dynamodb.toDynamoDBJson($util.autoId()),
-  },
-  "attributeValues": $util.toJson($values),
-  "condition": $util.toJson({
-    "expression": "attribute_not_exists(#id)",
-    "expressionNames": {
-      "#id": "id"
-    }
-  })
+	"version": "2017-02-28",
+	"operation": "PutItem",
+	"key": {
+		"id": $util.dynamodb.toDynamoDBJson($util.autoId()),
+	},
+	"attributeValues": $util.toJson($values),
+	"condition": $util.toJson({
+		"expression": "attribute_not_exists(#id)",
+		"expressionNames": {
+			"#id": "id"
+		}
+	})
 }
