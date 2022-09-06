@@ -1,10 +1,17 @@
 import {useParams} from '@remix-run/react';
 import {useCallback, useEffect, useState} from 'react';
+import {useGetButtonQuery} from '~/generated/graphql';
 import ButtonManager from '~/lib/ButtonManager';
 
 export default function Button() {
 	const {id} = useParams();
 	const [button, setButton] = useState<ButtonManager | null>(null);
+
+	const [{data: buttonData}] = useGetButtonQuery({
+		variables: {
+			id: id!,
+		},
+	});
 
 	useEffect(() => {
 		if (id !== undefined) {
@@ -20,6 +27,7 @@ export default function Button() {
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Button ID: {id}</h1>
+			<p>Data: {JSON.stringify(buttonData)}</p>
 			<button
 				type="button"
 				onClick={handleClickButton}

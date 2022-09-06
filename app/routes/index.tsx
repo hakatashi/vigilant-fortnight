@@ -2,7 +2,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
-import {useCreateButtonMutation, useGetButtonQuery} from '~/generated/graphql';
+import {useCreateButtonMutation} from '~/generated/graphql';
 import SkywayConnections from '~/lib/SkywayConnections';
 import {peerIdsState, idState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
@@ -33,12 +33,6 @@ export default function Index() {
 		};
 	}, []);
 
-	const [{data}] = useGetButtonQuery({
-		variables: {
-			id: '07920555-db03-4f5b-93ca-2f00425d8538',
-		},
-	});
-
 	const [createButtonResult, createButton] = useCreateButtonMutation();
 
 	const handleClickButton = useCallback(async () => {
@@ -49,7 +43,6 @@ export default function Index() {
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Connection test page</h1>
-			<p>Data: {JSON.stringify(data)}</p>
 			<p>Clock offset: {clockOffset}ms</p>
 			<p>CDN RTT: {rtt}ms</p>
 			<p>ID: {id}</p>
