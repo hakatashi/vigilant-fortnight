@@ -4,38 +4,10 @@ import noop from 'lodash/noop';
 import {useCallback, useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
-import {useQuery} from 'urql';
-import {GetButtonDocument, useCreateButtonMutation, useGetButtonQuery} from '~/generated/graphql';
+import {useCreateButtonMutation, useGetButtonQuery} from '~/generated/graphql';
 import SkywayConnections from '~/lib/SkywayConnections';
 import {peerIdsState, idState, wsState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
-
-// import Youtube from 'react-player/youtube';
-
-
-const useFriendStatus = (friendID) => {
-	const [isOnline, setIsOnline] = useState<boolean>(false);
-
-	const handleStatusChange = (status: boolean) => {
-		setIsOnline(status);
-	};
-
-	useEffect(() => {
-		console.log(`Subscribed to ${friendID}`, handleStatusChange);
-		return () => {
-			console.log(`Unsubscribed to ${friendID}`, handleStatusChange);
-		};
-	}, [friendID]);
-
-	return isOnline;
-};
-
-const Friend = ({friendID}: {friendID: number}) => {
-	const isOnline = useFriendStatus(friendID);
-	return (
-		<p>{friendID}: {isOnline}</p>
-	);
-};
 
 // eslint-disable-next-line react/function-component-definition
 export default function Index() {
@@ -86,19 +58,12 @@ export default function Index() {
 	const handleClickButton = useCallback(async () => {
 		const result = await createButton({connectionId: id});
 		console.log(result);
-	}, [id]);
+	}, [id, createButton]);
 
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
 			<h1>Connection test page</h1>
 			<p>Data: {JSON.stringify(data)}</p>
-			<Friend friendID={1}/>
-			<Friend friendID={2}/>
-			<Friend friendID={2}/>
-			<Friend friendID={1}/>
-			<Friend friendID={1}/>
-			<Friend friendID={3}/>
-			<Friend friendID={1}/>
 			<p>Clock offset: {clockOffset}ms</p>
 			<p>CDN RTT: {rtt}ms</p>
 			<p>ID: {id}</p>
@@ -114,7 +79,7 @@ export default function Index() {
 			>
 				Create Button
 			</button>
-			<p>Result: {JSON.stringify(createButtonResult)}</p>
+			<p>Result: {JSON.stringify(createButtonResult.data?.createButton)}</p>
 			<div style={{
 				width: '10rem',
 				height: '10rem',
