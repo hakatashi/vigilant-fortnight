@@ -48,9 +48,11 @@ export const addBidToButton = async (buttonId: string, user: string, timestamp: 
 		Key: {
 			buttonId,
 		},
-		UpdateExpression: 'SET bids = list_append(bids, :bid)',
+		UpdateExpression: 'SET bids = list_append(bids, :bid), ADD bidUsers :user',
+		ConditionExpression: 'not(contains(bidUsers, :user))',
 		ExpressionAttributeValues: {
 			':bid': [{user, timestamp}],
+			':user': user,
 		},
 		ReturnValues: 'UPDATED_NEW',
 	})
