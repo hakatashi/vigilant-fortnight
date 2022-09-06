@@ -4,7 +4,7 @@ import noop from 'lodash/noop';
 import {useCallback, useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
-import {useQuery} from 'urql';
+import {useQuery, useMutation} from 'urql';
 import SkywayConnections from '~/lib/SkywayConnections';
 import {peerIdsState, idState, wsState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
@@ -87,16 +87,19 @@ export default function Index() {
 		`,
 	});
 
+	const [createButtonResult, createButton] = useMutation(`
+		mutation ($connectionId: ID!) {
+			createButton(connectionId: $connectionId) {
+				id
+				createdAt
+				updatedAt
+			}
+		}
+	`);
+
 	const handleClickButton = useCallback(async () => {
-		const res = await fetch('https://dyi126p82g.execute-api.ap-northeast-1.amazonaws.com/dev/button', {
-			method: 'PUT',
-			mode: 'cors',
-			body: JSON.stringify({
-				connectionId: id,
-			}),
-		});
-		const data = await res.json();
-		console.log(data);
+		const result = await createButton({connectionId: id});
+		console.log(result);
 	}, [id]);
 
 	return (
