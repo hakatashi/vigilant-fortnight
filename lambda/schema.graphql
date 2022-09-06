@@ -1,20 +1,20 @@
 type Query {
-  button(id: ID!): Button
+	button(id: ID!): Button
 }
 
 type Mutation {
-  createButton(connectionId: ID!): Button
+	createButton(connectionId: ID!): Button
 }
 
 type Button {
-  id: ID!
-  connectionId: ID!
-  bids: [Bid]
-  createdAt: Int
-  updatedAt: Int
+	id: ID!
+	connectionId: ID!
+	bids: [Bid]
+	createdAt: Int
+	updatedAt: Int
 }
 
 type Bid {
-  user: String!
-  timestamp: String!
+	user: String!
+	timestamp: String!
 }

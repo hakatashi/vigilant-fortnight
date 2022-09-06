@@ -4,7 +4,8 @@ import noop from 'lodash/noop';
 import {useCallback, useEffect, useState} from 'react';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
-import {useQuery, useMutation} from 'urql';
+import {useQuery} from 'urql';
+import {GetButtonDocument, useCreateButtonMutation, useGetButtonQuery} from '~/generated/graphql';
 import SkywayConnections from '~/lib/SkywayConnections';
 import {peerIdsState, idState, wsState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
@@ -74,28 +75,13 @@ export default function Index() {
 		};
 	}, []);
 
-	const [{data}] = useQuery({
-		query: `
-			query {
-				button(id: "07920555-db03-4f5b-93ca-2f00425d8538") {
-					id
-					connectionId
-					createdAt
-					updatedAt
-				}
-			}
-		`,
+	const [{data}] = useGetButtonQuery({
+		variables: {
+			id: '07920555-db03-4f5b-93ca-2f00425d8538',
+		},
 	});
 
-	const [createButtonResult, createButton] = useMutation(`
-		mutation ($connectionId: ID!) {
-			createButton(connectionId: $connectionId) {
-				id
-				createdAt
-				updatedAt
-			}
-		}
-	`);
+	const [createButtonResult, createButton] = useCreateButtonMutation();
 
 	const handleClickButton = useCallback(async () => {
 		const result = await createButton({connectionId: id});
@@ -121,7 +107,14 @@ export default function Index() {
 					<SkywayConnections id={id} peerIds={peerIds}/>
 				)}
 			</ClientOnly>
-			<button type="button" onClick={handleClickButton}>Create Button</button>
+			<button
+				type="button"
+				onClick={handleClickButton}
+				disabled={createButtonResult.fetching}
+			>
+				Create Button
+			</button>
+			<p>Result: {JSON.stringify(createButtonResult)}</p>
 			<div style={{
 				width: '10rem',
 				height: '10rem',

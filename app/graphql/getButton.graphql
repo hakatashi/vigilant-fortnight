@@ -1,0 +1,8 @@
+query getButton($id: ID!) {
+	button(id: $id) {
+		id
+		connectionId
+		createdAt
+		updatedAt
+	}
+}

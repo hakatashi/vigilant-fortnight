@@ -1,0 +1,7 @@
+mutation createButton ($connectionId: ID!) {
+	createButton(connectionId: $connectionId) {
+		id
+		createdAt
+		updatedAt
+	}
+}
