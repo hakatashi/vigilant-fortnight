@@ -277,6 +277,13 @@ const service: AWS = {
 				},
 				{
 					dataSource: 'buttons_table',
+					type: 'Query',
+					field: 'listButton',
+					request: 'listButton.request.vtl',
+					response: 'listButton.response.vtl',
+				},
+				{
+					dataSource: 'buttons_table',
 					type: 'Mutation',
 					field: 'createButton',
 					request: 'Mutation.createButton.request.vtl',
