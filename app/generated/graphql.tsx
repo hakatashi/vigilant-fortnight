@@ -43,6 +43,7 @@ export type MutationCreateButtonArgs = {
 export type Query = {
   __typename?: 'Query';
   button?: Maybe<Button>;
+  listButton?: Maybe<Array<Maybe<Button>>>;
 };
 
 
@@ -63,6 +64,11 @@ export type GetButtonQueryVariables = Exact<{
 
 
 export type GetButtonQuery = { __typename?: 'Query', button?: { __typename?: 'Button', id: string, connectionId: string, createdAt?: number | null, updatedAt?: number | null } | null };
+
+export type ListButtonQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListButtonQuery = { __typename?: 'Query', listButton?: Array<{ __typename?: 'Button', id: string } | null> | null };
 
 
 export const CreateButtonDocument = gql`
@@ -91,4 +97,15 @@ export const GetButtonDocument = gql`
 
 export function useGetButtonQuery(options: Omit<Urql.UseQueryArgs<GetButtonQueryVariables>, 'query'>) {
   return Urql.useQuery<GetButtonQuery, GetButtonQueryVariables>({ query: GetButtonDocument, ...options });
+};
+export const ListButtonDocument = gql`
+    query listButton {
+  listButton {
+    id
+  }
+}
+    `;
+
+export function useListButtonQuery(options?: Omit<Urql.UseQueryArgs<ListButtonQueryVariables>, 'query'>) {
+  return Urql.useQuery<ListButtonQuery, ListButtonQueryVariables>({ query: ListButtonDocument, ...options });
 };

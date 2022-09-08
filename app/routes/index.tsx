@@ -1,8 +1,9 @@
+import {Link} from '@remix-run/react';
 import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useRecoilValue} from 'recoil';
 import {ClientOnly} from 'remix-utils';
-import {useCreateButtonMutation} from '~/generated/graphql';
+import {useCreateButtonMutation, useListButtonQuery} from '~/generated/graphql';
 import SkywayConnections from '~/lib/SkywayConnections';
 import {peerIdsState, idState} from '~/lib/WebsocketConnections';
 import {clockOffsetState, ClockSync, rttState} from '~/lib/clockSync';
@@ -14,6 +15,8 @@ export default function Index() {
 	const id = useRecoilValue(idState);
 	const rtt = useRecoilValue(rttState);
 	const navigate = useNavigate();
+
+	const [{data: listButtonResult}] = useListButtonQuery();
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
@@ -42,7 +45,6 @@ export default function Index() {
 
 	return (
 		<div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.4'}}>
-			<h1>Connection test page</h1>
 			<p>Clock offset: {clockOffset}ms</p>
 			<p>CDN RTT: {rtt}ms</p>
 			<p>ID: {id}</p>
@@ -51,6 +53,16 @@ export default function Index() {
 					<SkywayConnections id={id} peerIds={peerIds}/>
 				)}
 			</ClientOnly>
+			{listButtonResult && (
+				<>
+					<p>Buttons:</p>
+					<ul>
+						{listButtonResult.listButton?.map((button) => (
+							<li key={button?.id}><Link to={`/buttons/${button?.id}`}>{button?.id}</Link></li>
+						))}
+					</ul>
+				</>
+			)}
 			<button
 				type="button"
 				onClick={handleClickButton}
